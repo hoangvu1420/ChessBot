@@ -7,9 +7,9 @@ Bits 6-11: chỉ số ô mục tiêu
 Bits 12-15: chỉ số flag biểu diễn các nước đi đặc biệt
 */
 
-using ConsoleChess.Core.Board;
+using ChessBot.Core.Board;
 
-namespace ConsoleChess.Core.Move_Generation;
+namespace ChessBot.Core.MoveGeneration;
 
 public readonly struct Move
 {
