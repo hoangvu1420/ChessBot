@@ -1,4 +1,4 @@
-namespace ConsoleChess.Core.Board;
+namespace ChessBot.Core.Board;
 
 // Contains definitions for each piece type (represented as integers),
 // as well as various helper functions for dealing with pieces.

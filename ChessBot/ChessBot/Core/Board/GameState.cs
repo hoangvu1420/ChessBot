@@ -1,4 +1,4 @@
-namespace ConsoleChess.Core.Board;
+namespace ChessBot.Core.Board;
 
 public readonly struct GameState(
 	int capturedPieceType,

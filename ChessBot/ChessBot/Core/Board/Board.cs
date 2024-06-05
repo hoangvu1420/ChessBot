@@ -1,16 +1,9 @@
-﻿using ConsoleChess.Core.Helpers;
-using ConsoleChess.Core.Move_Generation;
-using ConsoleChess.Core.Move_Generation.Bitboards;
-using ConsoleChess.Core.Move_Generation.Magics;
+﻿using ChessBot.Core.Utilities;
+using ChessBot.Core.MoveGeneration;
+using ChessBot.Core.MoveGeneration.Bitboards;
+using ChessBot.Core.MoveGeneration.Magics;
 
-namespace ConsoleChess.Core.Board;
-// Represents the current state of the board during a game.
-// The state includes things such as: positions of all pieces, side to move,
-// castling rights, en-passant square, etc. Some extra information is included
-// as well to help with evaluation and move generation.
-
-// The initial state of the board can be set from a FEN string, and moves are
-// subsequently made (or undone) using the MakeMove and UnmakeMove functions.
+namespace ChessBot.Core.Board;
 
 public sealed class Board
 {
@@ -19,16 +12,12 @@ public sealed class Board
 
 	// Stores piece code for each square on the board
 	public readonly int[] Squares;
-	// used for operations where you need to directly access the piece on a specific square, such as check the piece at
-	// a specific location or move a piece from one square to another.
 	
 	// Square index of white and black king
 	public int[] KingSquare;
 	
 	// Bitboard for each piece type and colour (white pawns, white knights, ... black pawns, etc.)
 	public ulong[] PieceBitboards;
-	// used for efficient computation of certain operations using bitwise operations. For example, generating the
-	// possible moves for a piece, checking for attacks on a square, or evaluating the state of the game.
 	
 	// Bitboards for all pieces of either colour (all white pieces, all black pieces)
 	public ulong[] ColourBitboards;
@@ -79,9 +68,6 @@ public sealed class Board
 		Squares = new int[64];
 	}
 
-	// Make a move on the board
-	// The inSearch parameter controls whether this move should be recorded in the game history.
-	// (for detecting three-fold repetition)
 	public void MakeMove(Move move, bool isInSearch = false)
 	{
 		// Get info about move
@@ -380,8 +366,6 @@ public sealed class Board
 		_cachedInCheckValue = false;
 	}
 
-	// Is current player in check?
-	// Note: caches check value so calling multiple times does not require recalculating
 	public bool IsInCheck()
 	{
 		if (_hasCachedInCheckValue)
@@ -513,12 +497,6 @@ public sealed class Board
 		return board;
 	}
 
-	// Update piece lists / bitboards based on given move info.
-	// Note that this does not account for the following things, which must be handled separately:
-	// 1. Removal of a captured piece
-	// 2. Movement of rook when castling
-	// 3. Removal of pawn from 1st/8th rank during pawn promotion
-	// 4. Addition of promoted piece during pawn promotion
 	private void MovePiece(int piece, int startSquare, int targetSquare)
 	{
 		BitBoardUtility.ToggleSquares(ref PieceBitboards[piece], startSquare, targetSquare);
@@ -550,8 +528,7 @@ public sealed class Board
 		{
 			return false;
 		}
-		// we need to check the last 6 positions, because the current position is always in the history
-		// and we also need 5 more positions to compare to
+
 		ulong currentZobristKey = CurrentGameState.ZobristKey;
 		int repetitions = 0;
 		foreach (ulong key in RepetitionPositionHistory)

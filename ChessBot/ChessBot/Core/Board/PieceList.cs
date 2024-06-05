@@ -1,4 +1,4 @@
-namespace ConsoleChess.Core.Board;
+namespace ChessBot.Core.Board;
 
 public class PieceList(int maxPieceCount = 16)
 {
