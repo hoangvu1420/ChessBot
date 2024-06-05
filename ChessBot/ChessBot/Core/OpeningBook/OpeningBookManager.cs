@@ -38,12 +38,10 @@ public class OpeningBookManager
 		Console.WriteLine($@"Total book positions: {_movesByPosition.Count}");
 	}
 
-	// WeightPow is a value between 0 and 1.
-	// 0 means all moves are picked with equal probability, 1 means moves are weighted by num times played.
 	public bool TryGetBookMove(Board.Board board, out string moveString, double weightPow = 0.5)
 	{
 		string positionFen = FenUtility.CurrentFen(board, alwaysIncludeEpSquare: false);
-		weightPow = Math.Clamp(weightPow, 0, 1); // this is to ensure that weightPow is between 0 and 1
+		weightPow = Math.Clamp(weightPow, 0, 1); 
 		if (_movesByPosition.TryGetValue(RemoveMoveCountersFromFen(positionFen), out var moves))
 		{
 			int totalPlayCount = 0;
