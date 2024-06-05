@@ -90,7 +90,6 @@ public class OpeningBookManager
 		return fenA.Substring(0, fenA.LastIndexOf(' '));
 	}
 
-
 	private readonly struct BookMove(string moveString, int numTimesPlayed)
 	{
 		public readonly string MoveString = moveString;
