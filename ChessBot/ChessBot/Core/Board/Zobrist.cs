@@ -43,6 +43,32 @@ public static class Zobrist
 		sideToMove = RandomUnsigned64BitNumber(rand);
 	}
 
+	public static ulong CalculateZobristKey(Board board)
+	{
+		ulong zobristKey = 0;
+
+		for (int squareIndex = 0; squareIndex < 64; squareIndex++)
+		{
+			int piece = board.Squares[squareIndex];
+
+			if (Piece.PieceType(piece) != Piece.None)
+			{
+				zobristKey ^= piecesMatrix[piece, squareIndex];
+			}
+		}
+
+		zobristKey ^= enPassantFile[board.CurrentGameState.EnPassantFile];
+
+		if (board.MoveColour == Piece.Black)
+		{
+			zobristKey ^= sideToMove;
+		}
+
+		zobristKey ^= castlingRights[board.CurrentGameState.CastlingRights];
+
+		return zobristKey;
+	}
+
 	private static ulong RandomUnsigned64BitNumber(Random rand)
 	{
 		byte[] buffer = new byte[8];
