@@ -52,7 +52,7 @@ public sealed class Board
 	public GameState CurrentGameState;
 	public ulong ZobristKey => CurrentGameState.ZobristKey;
 	public string CurrentFen => FenUtility.CurrentFen(this);
-	public string GameStartFen => _startPositionInfo.fen;
+	public string GameStartFen => _startPositionInfo.Fen;
 	public List<Move> AllGameMoves;
 
 
@@ -428,7 +428,7 @@ public sealed class Board
 		// Load pieces into board array and piece lists
 		for (int squareIndex = 0; squareIndex < 64; squareIndex++)
 		{
-			int piece = posInfo.squares[squareIndex];
+			int piece = posInfo.Squares[squareIndex];
 			int pieceType = Piece.PieceType(piece);
 			int colourIndex = Piece.IsWhite(piece) ? WhiteIndex : BlackIndex;
 			Squares[squareIndex] = piece;
@@ -450,23 +450,23 @@ public sealed class Board
 		}
 
 		// Side to move
-		IsWhiteToMove = posInfo.whiteToMove;
+		IsWhiteToMove = posInfo.WhiteToMove;
 
 		// Set extra bitboards
 		AllPiecesBitboard = ColourBitboards[WhiteIndex] | ColourBitboards[BlackIndex];
 		UpdateSliderBitboards();
 
 		// Create gamestate
-		int whiteCastle = (posInfo.whiteCastleKingside ? 1 << 0 : 0) | (posInfo.whiteCastleQueenside ? 1 << 1 : 0);
-		int blackCastle = (posInfo.blackCastleKingside ? 1 << 2 : 0) | (posInfo.blackCastleQueenside ? 1 << 3 : 0);
+		int whiteCastle = (posInfo.WhiteCastleKingSide ? 1 << 0 : 0) | (posInfo.WhiteCastleQueenSide ? 1 << 1 : 0);
+		int blackCastle = (posInfo.BlackCastleKingSide ? 1 << 2 : 0) | (posInfo.BlackCastleQueenSide ? 1 << 3 : 0);
 		int castlingRights = whiteCastle | blackCastle;
 
-		PlyCount = (posInfo.moveCount - 1) * 2 + (IsWhiteToMove ? 0 : 1);
+		PlyCount = (posInfo.MoveCount - 1) * 2 + (IsWhiteToMove ? 0 : 1);
 
 		// Set game state (note: calculating zobrist key relies on current game state)
-		CurrentGameState = new GameState(Piece.None, posInfo.epFile, castlingRights, posInfo.fiftyMovePlyCount, 0);
+		CurrentGameState = new GameState(Piece.None, posInfo.EpFile, castlingRights, posInfo.FiftyMovePlyCount, 0);
 		ulong zobristKey = Zobrist.CalculateZobristKey(this);
-		CurrentGameState = new GameState(Piece.None, posInfo.epFile, castlingRights, posInfo.fiftyMovePlyCount, zobristKey);
+		CurrentGameState = new GameState(Piece.None, posInfo.EpFile, castlingRights, posInfo.FiftyMovePlyCount, zobristKey);
 
 		RepetitionPositionHistory.Push(zobristKey);
 
