@@ -22,4 +22,21 @@ public class Evaluator {
         return 0;
     }
 
+    public readonly struct MaterialInfo
+	{
+		public readonly int MaterialScore;
+		public readonly int NumPawns;
+		public readonly int NumMajors;
+		public readonly int NumMinors;
+		public readonly int NumBishops;
+		public readonly int NumQueens;
+		public readonly int NumRooks;
+
+        public readonly ulong Pawns;
+		public readonly ulong EnemyPawns;
+
+        public MaterialInfo () {
+            MaterialScore = 0;
+        }
+    }
 }
