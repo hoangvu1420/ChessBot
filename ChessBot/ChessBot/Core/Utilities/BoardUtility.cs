@@ -1,9 +1,4 @@
 ﻿using ChessBot.Core.Board;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Spectre.Console;
 
 namespace ChessBot.Core.Utilities;

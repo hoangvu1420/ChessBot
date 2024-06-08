@@ -1,4 +1,5 @@
-namespace ConsoleChess.Core.Search;
+
+namespace ChessBot.Core.Search;
 
 public class RepetitionTable
 {

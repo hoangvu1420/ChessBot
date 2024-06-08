@@ -1,8 +1,8 @@
-using ConsoleChess.Core.Board;
-using ConsoleChess.Core.Helpers;
-using ConsoleChess.Core.Move_Generation.Bitboards;
+using ChessBot.Core.Board;
+using ChessBot.Core.Utilities;
+using ChessBot.Core.MoveGeneration.Bitboards;
 
-namespace ConsoleChess.Core.Move_Generation.Magics;
+namespace ChessBot.Core.MoveGeneration.Magics;
 
 public static class MagicHelper
 {

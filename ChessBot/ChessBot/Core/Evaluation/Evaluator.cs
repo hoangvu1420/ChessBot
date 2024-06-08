@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 ﻿using ChessBot.Core.Board;
 using ChessBot.Core.Utilities;
 using ChessBot.Core.MoveGeneration;

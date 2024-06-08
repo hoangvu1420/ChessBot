@@ -1,8 +1,7 @@
 using ChessBot.Core.Board;
 using ChessBot.Core.Utilities;
-using ConsoleChess.Core.Move_Generation;
-using ConsoleChess.Core.Move_Generation.Bitboards;
-using ConsoleChess.Core.Move_Generation.Magics;
+using ChessBot.Core.MoveGeneration.Bitboards;
+using ChessBot.Core.MoveGeneration.Magics;
 
 namespace ChessBot.Core.MoveGeneration;
 

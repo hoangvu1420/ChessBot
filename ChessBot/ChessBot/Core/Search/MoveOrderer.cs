@@ -1,20 +1,9 @@
-using ConsoleChess.Core.Board;
-using ConsoleChess.Core.Evaluation;
-using ConsoleChess.Core.Move_Generation;
-using ConsoleChess.Core.Move_Generation.Bitboards;
+using ChessBot.Core.Board;
+using ChessBot.Core.Evaluation;
+using ChessBot.Core.MoveGeneration;
+using ChessBot.Core.MoveGeneration.Bitboards;
 
-namespace ConsoleChess.Core.Search;
-
-/*
- * a killer move is a non-capturing move that caused a beta cutoff in the previous search. A beta cutoff occurs when
- * the search algorithm determines that it has found a move that is so good that it doesn't need to consider the
- * remaining moves.
- *
- * The idea behind killer moves is that if a non-capturing move caused a beta cutoff in the previous search, it is
- * likely to cause a beta cutoff again in the current search. Therefore, these moves are given a high priority in the
- * move ordering process, meaning they are examined early in the search. This can lead to more effective use of
- * alpha-beta pruning and a more efficient search process.
- */
+namespace ChessBot.Core.Search;
 
 public class MoveOrderer
 {
@@ -22,10 +11,7 @@ public class MoveOrderer
 	private const int MaxMoveCount = 218;
 
 	public Killers[] KillerMoves = new Killers[MaxKillerMovePly];
-	public int[,,] History = new int[2, 64, 64]; // 3D array to store history heuristic values
-	// color of the piece making the move.
-	// starting square of the piece making the move.
-	// target square of the piece making the move.
+	public int[,,] History = new int[2, 64, 64]; 
 	
 	public const int MaxKillerMovePly = 32;
 

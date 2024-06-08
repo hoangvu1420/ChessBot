@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChessBot.Core.Board;
+﻿namespace ChessBot.Core.Board;
 
 public static class Zobrist
 {
@@ -18,8 +12,7 @@ public static class Zobrist
 
 	static Zobrist()
 	{
-
-		const int seed = 29426028;  
+		const int seed = 29426028;
 		var rand = new Random(seed);
 
 		for (int squareIndex = 0; squareIndex < 64; squareIndex++)

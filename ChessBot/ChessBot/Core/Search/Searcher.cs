@@ -1,10 +1,10 @@
 using System.Text;
-using ConsoleChess.Core.Board;
-using ConsoleChess.Core.Helpers;
-using ConsoleChess.Core.Move_Generation;
+using ChessBot.Core.Board;
+using ChessBot.Core.MoveGeneration;
+using ChessBot.Core.Utilities;
 using Spectre.Console;
 
-namespace ConsoleChess.Core.Search;
+namespace ChessBot.Core.Search;
 
 using static Math;
 

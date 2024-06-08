@@ -1,4 +1,4 @@
-namespace ConsoleChess.Core.Move_Generation.Magics;
+namespace ChessBot.Core.MoveGeneration.Magics;
 
 using static PrecomputedMagics;
 
