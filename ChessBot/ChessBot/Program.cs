@@ -1,9 +1,28 @@
 ﻿namespace ChessBot;
 
-public class Program
+public static class Program
 {
-	static void Main(string[] args)
+	public static void Main(string[] args)
 	{
-		Console.WriteLine("Hello, World!");
+		if (Static.UseUci)
+		{
+			EngineUci engineUci = new();
+
+			string command = String.Empty;
+			while (command != "quit")
+			{
+				command = Console.ReadLine();
+				engineUci.ReceiveCommand(command);
+			}
+		}
+		else
+		{
+			Engine engine = new();
+
+			// use UTF-8 encoding
+			Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+			engine.RunGame();
+		}
 	}
 }
