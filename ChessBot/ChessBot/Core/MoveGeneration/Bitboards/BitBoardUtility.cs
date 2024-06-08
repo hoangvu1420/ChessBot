@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace ConsoleChess.Core.Move_Generation.Bitboards;
+namespace ChessBot.Core.MoveGeneration.Bitboards;
 
 public static class BitBoardUtility
 {

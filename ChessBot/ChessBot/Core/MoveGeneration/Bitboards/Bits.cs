@@ -1,7 +1,7 @@
-using ConsoleChess.Core.Helpers;
+using ChessBot.Core.Utilities;
 using static System.Math;
 
-namespace ConsoleChess.Core.Move_Generation.Bitboards;
+namespace ChessBot.Core.MoveGeneration.Bitboards;
 //Tập hợp các bitboard được tính toán trước
 public static class Bits
 {
