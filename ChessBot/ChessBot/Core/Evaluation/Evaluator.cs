@@ -15,11 +15,32 @@ public class Evaluator {
     public const int RookValue = 500;
     public const int QueenValue = 900;
 
+	private static readonly int[] PassedPawnBonuses = [0, 120, 80, 50, 30, 15, 15]; // 0-6 squares from promotion
+	private static readonly int[] IsolatedPawnPenaltyByCount = [0, -10, -25, -50, -75, -75, -75, -75, -75];
+	private static readonly int[] KingPawnShieldScores = [4, 7, 4, 3, 6, 3];
+
+	private const float EndgameMaterialStart = RookValue * 2 + BishopValue + KnightValue;
+
     private Board.Board _board;
+	private EvaluationData _whiteEval;
+	private EvaluationData _blackEval;
+
     public int Evaluate(Board.Board board) {
         _board = board;
+		_whiteEval = new EvaluationData();
+		_blackEval = new EvaluationData();
 
-        return 0;
+		MaterialInfo whiteMaterial = GetMaterialInfo(Board.Board.WhiteIndex);
+		MaterialInfo blackMaterial = GetMaterialInfo(Board.Board.BlackIndex);
+
+		// Score based on number (and type) of pieces on board
+		_whiteEval.MaterialScore = whiteMaterial.MaterialScore;
+		_blackEval.MaterialScore = blackMaterial.MaterialScore;
+
+		//
+		int perspective = board.IsWhiteToMove ? 1 : -1;
+		int eval = _whiteEval.Sum() - _blackEval.Sum();
+		return eval * perspective;
     }
 
 	private MaterialInfo GetMaterialInfo(int colourIndex) {
@@ -36,6 +57,30 @@ public class Evaluator {
 		return new MaterialInfo(numPawns, numKnights, numBishops, numQueens, numRooks, myPawns, enemyPawns);
 	}
 
+	public int KingPawnShield () {
+		/*
+		 * This method calculates a penalty based on the state of the pawn shield in front of the king. 
+		 */
+		return 0;
+	}
+
+	public int EvaluatePawns(int colourIndex) {
+		return 0;
+	}
+
+	private int MopUpEval(bool isWhite, MaterialInfo myMaterial, MaterialInfo enemyMaterial) {
+		/*
+		 * This method encourages the player to use their king to push the enemy king to the edge of the board in the
+		 * endgame, especially when the player has a material advantage.
+		 */
+		return 0;
+	}
+
+	private int EvaluatePieceSquareTables(bool isWhite, float endgameTrans) {
+		
+		return 0;
+	}
+
 	private static int EvaluatePieceSquareTable(int[] table, PieceList pieceList, bool isWhite)
 	{
 		int value = 0;
@@ -48,11 +93,15 @@ public class Evaluator {
 
 	private struct EvaluationData
 	{
-		
+		public int MaterialScore;
+		public int MopUpScore;
+		public int PieceSquareScore;
+		public int PawnScore;
+		public int PawnShieldScore;
 
 		public int Sum()
 		{
-			return 0;	
+			return MaterialScore + MopUpScore + PieceSquareScore + PawnScore + PawnShieldScore;	
 		}
 	}
 
