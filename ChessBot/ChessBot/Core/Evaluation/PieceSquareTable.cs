@@ -1,8 +1,28 @@
-namespace ConsoleChess.Core.Evaluation;
-
 using ChessBot.Core.Board;
+using ChessBot.Core.Utilities;
+
+namespace ChessBot.Core.Evaluation;
 
 public static class PieceSquareTable {
+
+	public static int GetSquareValue(int[] table, int square, bool isWhite)
+	{
+		if (isWhite)
+		{
+			int file = BoardUtility.FileIndex(square);
+			int rank = BoardUtility.RankIndex(square);
+			rank = 7 - rank;
+			square = BoardUtility.IndexFromCoord(file, rank);
+		}
+
+		return table[square];
+	}
+
+	public static int GetSquareValue(int piece, int square)
+	{
+		return Tables[piece][square];
+	}
+
     public static readonly int[] Pawns =
 	[
 		0,   0,   0,   0,   0,   0,   0,   0,

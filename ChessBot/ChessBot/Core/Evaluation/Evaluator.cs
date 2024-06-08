@@ -35,6 +35,27 @@ public class Evaluator {
 
 		return new MaterialInfo(numPawns, numKnights, numBishops, numQueens, numRooks, myPawns, enemyPawns);
 	}
+
+	private static int EvaluatePieceSquareTable(int[] table, PieceList pieceList, bool isWhite)
+	{
+		int value = 0;
+		for (int i = 0; i < pieceList.Count; i++)
+		{
+			value += PieceSquareTable.GetSquareValue(table, pieceList[i], isWhite);
+		}
+		return value;
+	}
+
+	private struct EvaluationData
+	{
+		
+
+		public int Sum()
+		{
+			return 0;	
+		}
+	}
+
     public readonly struct MaterialInfo
 	{
 		public readonly int MaterialScore;
