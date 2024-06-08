@@ -29,7 +29,11 @@ public class OpeningBookManager
 
 			_movesByPosition.Add(positionFen, bookMoves);
 		}
-		Console.WriteLine($@"Total book positions: {_movesByPosition.Count}");
+
+		if (!Static.UseUci)
+		{
+			Console.WriteLine($@"Total book positions: {_movesByPosition.Count}");
+		}
 	}
 
 	public bool TryGetBookMove(Board.Board board, out string moveString, double weightPow = 0.5)
@@ -66,7 +70,10 @@ public class OpeningBookManager
 				if (random <= probCumul[i])
 				{
 					moveString = moves[i].MoveString;
-					Console.WriteLine($@"Found book move index: {i}");
+					if (!Static.UseUci)
+					{
+						Console.WriteLine($@"Found book move index: {i}");
+					}
 					return true;
 				}
 			}
