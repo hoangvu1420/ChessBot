@@ -1,5 +1,7 @@
 namespace ConsoleChess.Core.Evaluation;
 
+using ChessBot.Core.Board;
+
 public static class PieceSquareTable {
     public static readonly int[] Pawns =
 	[
@@ -84,4 +86,35 @@ public static class PieceSquareTable {
 		-30, -25,   0,   0,   0,   0, -25, -30,
 		-50, -30, -30, -30, -30, -30, -30, -50
 	];
+
+	public static readonly int[][] Tables;
+	
+	static PieceSquareTable()
+	{
+		Tables = new int[Piece.MaxPieceIndex + 1][];
+		Tables[Piece.GetPieceValue(Piece.Pawn, Piece.White)] = Pawns;
+		Tables[Piece.GetPieceValue(Piece.Rook, Piece.White)] = Rooks;
+		Tables[Piece.GetPieceValue(Piece.Knight, Piece.White)] = Knights;
+		Tables[Piece.GetPieceValue(Piece.Bishop, Piece.White)] = Bishops;
+		Tables[Piece.GetPieceValue(Piece.Queen, Piece.White)] = Queens;
+
+		Tables[Piece.GetPieceValue(Piece.Pawn, Piece.Black)] = GetFlippedTable(Pawns);
+		Tables[Piece.GetPieceValue(Piece.Rook, Piece.Black)] = GetFlippedTable(Rooks);
+		Tables[Piece.GetPieceValue(Piece.Knight, Piece.Black)] = GetFlippedTable(Knights);
+		Tables[Piece.GetPieceValue(Piece.Bishop, Piece.Black)] = GetFlippedTable(Bishops);
+		Tables[Piece.GetPieceValue(Piece.Queen, Piece.Black)] = GetFlippedTable(Queens);
+	}
+
+	private static int[] GetFlippedTable(int[] table)
+	{
+		int[] flippedTable = new int[table.Length];
+
+		for (int i = 0; i < table.Length; i++)
+		{
+			Coord coord = new Coord(i);
+			Coord flippedCoord = new Coord(coord.fileIndex, 7 - coord.rankIndex);
+			flippedTable[flippedCoord.SquareIndex] = table[i];
+		}
+		return flippedTable;
+	}
 }
