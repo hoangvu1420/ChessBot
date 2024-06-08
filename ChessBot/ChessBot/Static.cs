@@ -2,5 +2,5 @@
 
 public static class Static
 {
-	public const bool UseUci = false;
+	public const bool UseUci = true;
 }
