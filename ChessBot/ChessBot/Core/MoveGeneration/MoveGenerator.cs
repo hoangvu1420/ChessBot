@@ -1,9 +1,10 @@
-using ConsoleChess.Core.Board;
-using ConsoleChess.Core.Helpers;
+using ChessBot.Core.Board;
+using ChessBot.Core.Utilities;
+using ConsoleChess.Core.Move_Generation;
 using ConsoleChess.Core.Move_Generation.Bitboards;
 using ConsoleChess.Core.Move_Generation.Magics;
 
-namespace ConsoleChess.Core.Move_Generation;
+namespace ChessBot.Core.MoveGeneration;
 
 using static PrecomputedMoveData;
 
@@ -22,12 +23,10 @@ public class MoveGenerator
     private bool _isInCheck;
     private bool _isInDoubleCheck;
 
-    // If in check, this bitboard contains squares in line from checking piece up to king
-    // If not in check, all bits are set to 1
     private ulong _checkRayBitmask;
 
-    private ulong _pinRays; // bit (1) means the corresponding square is part of a pinning ray.
-    private ulong _notPinRays; // inverse of _pinRays
+    private ulong _pinRays; 
+    private ulong _notPinRays; 
     private ulong _opponentAttackMapNoPawns;
     private ulong _opponentSlidingAttackMap;
 
@@ -45,8 +44,7 @@ public class MoveGenerator
 
     private ulong _emptyOrEnemySquares;
 
-    // If only captures should be generated, this will have 1s only in positions of enemy pieces.
-    // Otherwise, it will have 1s everywhere.
+
     private ulong _moveTypeMask;
 
     public Span<Move> GenerateMoves(Board.Board board, bool capturesOnly = false)
@@ -56,8 +54,7 @@ public class MoveGenerator
         return moves;
     }
 
-    // Generates list of legal moves in current position.
-    // Quiet moves (non captures) can optionally be excluded. This is used in quiescence search.
+
     public void GenerateMoves(Board.Board board, ref Span<Move> moves, bool capturesOnly = false)
     {
         _board = board;
@@ -67,7 +64,6 @@ public class MoveGenerator
 
         GenerateKingMoves(moves);
 
-        // Only king moves are valid in a double check position, so can return early.
         if (!_isInDoubleCheck)
         {
             GenerateSlidingMoves(moves);
@@ -152,7 +148,6 @@ public class MoveGenerator
 
     private void GenerateSlidingMoves(Span<Move> moves)
     {
-        // Limit movement to empty or enemy squares, and must block check if king is in check.
         ulong moveMask = _emptyOrEnemySquares & _checkRayBitmask & _moveTypeMask;
 
         ulong orthogonalSlidePieces = _board.FriendlyOrthogonalSlidePieces;
@@ -389,8 +384,6 @@ public class MoveGenerator
 
     private void GenSlidingAttackMap()
     {
-        //calculates the attack map for the opponent's sliding pieces (queen, rook, bishop).
-
         _opponentSlidingAttackMap = 0;
 
         UpdateSlideAttack(_board.EnemyOrthogonalSlidePieces, true);
@@ -410,14 +403,9 @@ public class MoveGenerator
         }
     }
 
-    /*
-     * Calculates information about which squares are attacked by the opponent's pieces, taking into account potential
-     * pins and checks. This information is crucial to determine if a move keeps the king safe.
-     */
     private void CalculateAttackData()
     {
         GenSlidingAttackMap();
-        // Search squares in all directions around friendly king for checks/pins by enemy sliding pieces (queen, rook, bishop)
         int startDirIndex = 0;
         int endDirIndex = 8;
 
@@ -427,7 +415,6 @@ public class MoveGenerator
             endDirIndex = _board.Bishops[_enemyIndex].Count > 0 ? 8 : 4;
         }
 
-        // iterates over all directions around the friendly king to search for checks/pins by enemy sliding pieces
         for (int dir = startDirIndex; dir < endDirIndex; dir++)
         {
             bool isDiagonal = dir > 3;
@@ -440,8 +427,7 @@ public class MoveGenerator
             int n = NumSquaresToEdge[_friendlyKingSquare][dir];
             int directionOffset = DirectionOffsets[dir];
             bool isFriendlyPieceAlongRay = false;
-            ulong
-                rayMask = 0; // bitmask of squares between the friendly king and the enemy sliding piece that is attacking it
+            ulong rayMask = 0;
 
             for (int i = 0; i < n; i++)
             {
@@ -454,12 +440,10 @@ public class MoveGenerator
 
                 if (Piece.IsColour(piece, _friendlyColour)) // The piece is friendly
                 {
-                    // First friendly piece we have come across in this direction, so it might be pinned
                     if (!isFriendlyPieceAlongRay)
                     {
                         isFriendlyPieceAlongRay = true;
                     }
-                    // This is the second friendly piece we've found in this direction, therefore pin is not possible
                     else
                     {
                         break;
@@ -470,16 +454,13 @@ public class MoveGenerator
                 {
                     int pieceType = Piece.PieceType(piece);
 
-                    // Check if piece is in bitmask of pieces able to move in current direction
                     if (isDiagonal && Piece.IsDiagonalSlider(pieceType) ||
                         !isDiagonal && Piece.IsOrthogonalSlider(pieceType))
                     {
-                        // Friendly piece blocks the check, so this is a pin
                         if (isFriendlyPieceAlongRay)
                         {
                             _pinRays |= rayMask;
                         }
-                        // No friendly piece blocking the attack, so this is a check
                         else
                         {
                             _checkRayBitmask |= rayMask;
@@ -488,12 +469,10 @@ public class MoveGenerator
                         }
                     }
 
-                    // This enemy piece is not able to move in the current direction, and so is blocking any checks/pins
                     break;
                 }
             }
 
-            // Stop searching for pins if in double check, as the king is the only piece able to move in that case anyway
             if (_isInDoubleCheck)
             {
                 break;
@@ -551,9 +530,6 @@ public class MoveGenerator
         }
     }
 
-    // Test if capturing a pawn with en-passant reveals a sliding piece attack against the king
-    // Note: this is only used for cases where pawn appears to not be pinned due to opponent pawn being on same rank
-    // (therefore only need to check orthogonal sliders)
     private bool InCheckAfterEnPassant(int startSquare, int targetSquare, int epCaptureSquare)
     {
         ulong enemyOrtho = _board.EnemyOrthogonalSlidePieces;
