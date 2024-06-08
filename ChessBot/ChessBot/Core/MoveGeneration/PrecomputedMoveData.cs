@@ -1,7 +1,7 @@
-using ConsoleChess.Core.Board;
-using ConsoleChess.Core.Helpers;
+using ChessBot.Core.Board;
+using ChessBot.Core.Utilities;
 
-namespace ConsoleChess.Core.Move_Generation;
+namespace ChessBot.Core.MoveGeneration;
 
 using static Math;
 
